@@ -1,0 +1,10 @@
+{
+  "register.ejs": {
+    "layoutPage": "main",
+    "description": ""
+  },
+  "termsandconditions.ejs": {
+    "layoutPage": "main",
+    "description": ""
+  }
+}

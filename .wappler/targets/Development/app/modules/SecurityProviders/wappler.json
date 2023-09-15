@@ -1,0 +1,47 @@
+{
+  "name": "wappler",
+  "module": "auth",
+  "action": "provider",
+  "options": {
+    "secret": "XZfFUWICmuDC3VJ",
+    "provider": "Database",
+    "connection": "db",
+    "passwordVerify": true,
+    "users": {
+      "table": "user",
+      "identity": "user_id",
+      "username": "email",
+      "password": "password"
+    },
+    "permissions": {
+      "Administrator": {
+        "table": "role",
+        "identity": "user_id",
+        "conditions": [
+          {
+            "column": "role",
+            "operator": "=",
+            "value": "A"
+          }
+        ]
+      },
+      "User": {
+        "table": "role",
+        "identity": "user_id",
+        "conditions": [
+          {
+            "column": "role",
+            "operator": "=",
+            "value": "U"
+          }
+        ]
+      }
+    }
+  },
+  "meta": [
+    {
+      "name": "identity",
+      "type": "text"
+    }
+  ]
+}

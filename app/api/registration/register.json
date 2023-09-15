@@ -1,0 +1,229 @@
+{
+  "meta": {
+    "options": {
+      "linkedFile": "/views/register.ejs ",
+      "linkedForm": "register1"
+    },
+    "$_POST": [
+      {
+        "type": "text",
+        "fieldName": "first_name",
+        "options": {
+          "rules": {
+            "core:required": {
+              "param": ""
+            }
+          }
+        },
+        "name": "first_name"
+      },
+      {
+        "type": "text",
+        "fieldName": "last_name",
+        "options": {
+          "rules": {
+            "core:required": {
+              "param": ""
+            }
+          }
+        },
+        "name": "last_name"
+      },
+      {
+        "type": "text",
+        "fieldName": "email",
+        "options": {
+          "rules": {
+            "core:required": {
+              "param": ""
+            },
+            "core:email": {
+              "param": ""
+            }
+          }
+        },
+        "name": "email"
+      },
+      {
+        "type": "text",
+        "fieldName": "password",
+        "options": {
+          "rules": {
+            "core:required": {
+              "param": ""
+            },
+            "core:minlength": {
+              "param": "8"
+            },
+            "core:nowhitespace": {
+              "param": ""
+            }
+          }
+        },
+        "name": "password"
+      }
+    ]
+  },
+  "exec": {
+    "steps": [
+      {
+        "name": "emailValidate",
+        "module": "validator",
+        "action": "validate",
+        "options": {
+          "data": [
+            {
+              "name": "emailValidate",
+              "value": "{{$_POST.email}}",
+              "rules": {
+                "db:notexists": {
+                  "param": {
+                    "connection": "db",
+                    "table": "user",
+                    "column": "email"
+                  },
+                  "message": "eMail already exists in database."
+                }
+              },
+              "fieldName": "email"
+            }
+          ]
+        }
+      },
+      {
+        "name": "hash",
+        "module": "crypto",
+        "action": "passwordHash",
+        "options": {
+          "password": "{{$_POST.password}}"
+        },
+        "outputType": "text"
+      },
+      {
+        "name": "insert",
+        "module": "dbupdater",
+        "action": "insert",
+        "options": {
+          "connection": "db",
+          "sql": {
+            "type": "insert",
+            "values": [
+              {
+                "table": "user",
+                "column": "first_name",
+                "type": "text",
+                "value": "{{$_POST.first_name}}"
+              },
+              {
+                "table": "user",
+                "column": "last_name",
+                "type": "text",
+                "value": "{{$_POST.last_name}}"
+              },
+              {
+                "table": "user",
+                "column": "email",
+                "type": "text",
+                "value": "{{$_POST.email}}"
+              },
+              {
+                "table": "user",
+                "column": "password",
+                "type": "text",
+                "value": "{{hash}}"
+              }
+            ],
+            "table": "user",
+            "returning": "user_id",
+            "query": "insert into `user` (`email`, `first_name`, `last_name`, `password`) values (?, ?, ?, ?) returning `user_id`",
+            "params": [
+              {
+                "name": ":P1",
+                "type": "expression",
+                "value": "{{$_POST.first_name}}",
+                "test": ""
+              },
+              {
+                "name": ":P2",
+                "type": "expression",
+                "value": "{{$_POST.last_name}}",
+                "test": ""
+              },
+              {
+                "name": ":P3",
+                "type": "expression",
+                "value": "{{$_POST.email}}",
+                "test": ""
+              },
+              {
+                "name": ":P4",
+                "type": "expression",
+                "value": "{{hash}}",
+                "test": ""
+              }
+            ]
+          }
+        },
+        "meta": [
+          {
+            "name": "identity",
+            "type": "text"
+          },
+          {
+            "name": "affected",
+            "type": "number"
+          }
+        ]
+      },
+      {
+        "name": "insert1",
+        "module": "dbupdater",
+        "action": "insert",
+        "options": {
+          "connection": "db",
+          "sql": {
+            "type": "insert",
+            "values": [
+              {
+                "table": "role",
+                "column": "user_id",
+                "type": "text",
+                "value": "{{insert.identity}}"
+              },
+              {
+                "table": "role",
+                "column": "role",
+                "type": "text",
+                "value": "U"
+              }
+            ],
+            "table": "role",
+            "returning": "role_id",
+            "query": "insert into `role` (`role`, `user_id`) values (?, ?)",
+            "params": [
+              {
+                "name": ":P1",
+                "type": "expression",
+                "value": "{{insert.identity}}",
+                "test": ""
+              }
+            ]
+          }
+        },
+        "meta": [
+          {
+            "name": "identity",
+            "type": "text"
+          },
+          {
+            "name": "affected",
+            "type": "number"
+          }
+        ]
+      }
+    ]
+  },
+  "usedModules": {
+    "argon2": "^0.30.2"
+  }
+}
