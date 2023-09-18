@@ -7,6 +7,16 @@
     "$_POST": [
       {
         "type": "text",
+        "fieldName": "product_name",
+        "name": "product_name"
+      },
+      {
+        "type": "text",
+        "fieldName": "product_id",
+        "name": "product_id"
+      },
+      {
+        "type": "text",
         "fieldName": "first_name",
         "options": {
           "rules": {
@@ -62,10 +72,36 @@
         },
         "name": "password"
       }
+    ],
+    "$_SESSION": [
+      {
+        "type": "text",
+        "name": "regcode"
+      }
     ]
   },
   "exec": {
     "steps": [
+      {
+        "name": "",
+        "module": "core",
+        "action": "condition",
+        "options": {
+          "if": "{{$_POST.product_name!=$_SESSION.regcode}}",
+          "then": {
+            "steps": {
+              "name": "Unauthorised",
+              "module": "core",
+              "action": "response",
+              "options": {
+                "status": 401,
+                "data": "Unauthorised"
+              }
+            }
+          }
+        },
+        "outputType": "boolean"
+      },
       {
         "name": "emailValidate",
         "module": "validator",
@@ -89,6 +125,26 @@
             }
           ]
         }
+      },
+      {
+        "name": "",
+        "module": "core",
+        "action": "condition",
+        "options": {
+          "if": "{{$_POST.product_id.length()>0}}",
+          "then": {
+            "steps": {
+              "name": "Unauthorised_copy",
+              "module": "core",
+              "action": "response",
+              "options": {
+                "status": 401,
+                "data": "Unauthorised"
+              }
+            }
+          }
+        },
+        "outputType": "boolean"
       },
       {
         "name": "hash",

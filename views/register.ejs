@@ -1,8 +1,11 @@
 <!-- Wappler include head-page="layouts/main" fontawesome_5="cdn" bootstrap5="local" is="dmx-app" id="register" appConnect="local" components="{dmxValidator:{},dmxNotifications:{},dmxBrowser:{}}" -->
+<dmx-serverconnect id="conn_get_reg_code" url="/api/registration/regcode"></dmx-serverconnect>
 <div is="dmx-browser" id="browser1"></div>
 <dmx-notifications id="notifies1"></dmx-notifications>
 <div class="container">
     <form id="register1" is="dmx-serverconnect-form" method="post" action="/api/registration/register" dmx-on:error="notifies1.danger('Something went wrong')" dmx-on:unauthorized="notifies1.warning('Unauthorized')" dmx-on:success="register1.reset();browser1.goto('/',true,'Home Page')">
+        <input id="product_name" name="product_name" type="hidden" class="form-control" dmx-bind:value="conn_get_reg_code.data.regcode">
+        <input id="product_id" name="product_id" type="hidden" class="form-control">
         <div class="row justify-content-center">
             <div class="col-12 col-md-8 col-lg-8 col-xl-6">
                 <div class="row">
