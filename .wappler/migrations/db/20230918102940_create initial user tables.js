@@ -7,7 +7,7 @@ exports.up = function(knex) {
       table.string('last_name');
       table.string('email');
       table.string('password');
-      table.date('date_signup').defaultTo(knex.fn.now());
+      table.datetime('date_signup').defaultTo(knex.fn.now());
     })
     .createTable('role', async function (table) {
       table.increments('role_id');

@@ -22,16 +22,28 @@
     ]
   },
   "exec": {
-    "steps": {
-      "name": "identity",
-      "module": "auth",
-      "action": "login",
-      "options": {
-        "provider": "wappler",
-        "username": "{{$_POST.email}}"
+    "steps": [
+      {
+        "name": "identity",
+        "module": "auth",
+        "action": "login",
+        "options": {
+          "provider": "wappler",
+          "username": "{{$_POST.email}}"
+        },
+        "output": true,
+        "meta": []
       },
-      "output": true,
-      "meta": []
-    }
+      {
+        "name": "identity1",
+        "module": "auth",
+        "action": "identify",
+        "options": {
+          "provider": "wappler"
+        },
+        "output": true,
+        "meta": []
+      }
+    ]
   }
 }

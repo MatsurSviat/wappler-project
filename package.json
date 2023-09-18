@@ -37,8 +37,8 @@
     "socket.io": "^4.6.1",
     "unzipper": "^0.10.11",
     "uuid": "^9.0.0",
-    "sqlite3": "^5.0.2",
-    "argon2": "^0.28.3"
+    "argon2": "^0.28.3",
+    "sqlite3": "^5.0.2"
   },
   "nodemonConfig": {
     "watch": [

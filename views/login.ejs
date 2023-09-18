@@ -19,8 +19,8 @@
 <dmx-notifications id="notifies1"></dmx-notifications>
 
 <meta name="ac:route" content="/login">
-<div class="container">
-    <form id="login1" is="dmx-serverconnect-form" method="post" action="/api/registration/login" dmx-on:unauthorized="modalwarning.show()" dmx-on:error="notifies1.danger('Something went wrong')" dmx-on:success="browser1.goto('/',true,'Home page')">
+<div class="container mt-5">
+    <form id="login1" is="dmx-serverconnect-form" method="post" action="/api/registration/login" dmx-on:unauthorized="modalwarning.show()" dmx-on:error="notifies1.danger('Something went wrong')" dmx-on:success="browser1.goto('/')">
         <div class="row">
             <div class="col-12 col-md-8 col-lg-7 col-xl-5 text-start">
                 <div class="row">
