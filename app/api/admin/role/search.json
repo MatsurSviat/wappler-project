@@ -1,0 +1,83 @@
+{
+  "meta": {
+    "$_GET": [
+      {
+        "type": "text",
+        "name": "sort"
+      },
+      {
+        "type": "text",
+        "name": "dir"
+      },
+      {
+        "type": "text",
+        "name": "filter"
+      }
+    ]
+  },
+  "exec": {
+    "steps": [
+      {
+        "name": "",
+        "module": "auth",
+        "action": "restrict",
+        "options": {
+          "provider": "wappler",
+          "permissions": [
+            "Administrator"
+          ],
+          "loginUrl": "/login",
+          "forbiddenUrl": "/login"
+        }
+      },
+      {
+        "name": "query",
+        "module": "dbconnector",
+        "action": "select",
+        "options": {
+          "connection": "db",
+          "sql": {
+            "type": "select",
+            "columns": [
+              {
+                "table": "role",
+                "column": "role_id"
+              },
+              {
+                "table": "role",
+                "column": "user_id"
+              },
+              {
+                "table": "role",
+                "column": "role"
+              }
+            ],
+            "params": [],
+            "table": {
+              "name": "role"
+            },
+            "primary": "role_id",
+            "joins": [],
+            "query": "select `role_id`, `user_id`, `role` from `role`"
+          }
+        },
+        "output": true,
+        "meta": [
+          {
+            "type": "number",
+            "name": "role_id"
+          },
+          {
+            "type": "text",
+            "name": "user_id"
+          },
+          {
+            "type": "text",
+            "name": "role"
+          }
+        ],
+        "outputType": "array"
+      }
+    ]
+  }
+}

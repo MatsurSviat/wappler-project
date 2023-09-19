@@ -20,6 +20,21 @@
       "path": "/login",
       "page": "login",
       "layout": "main"
+    },
+    {
+      "path": "/cwaadmin",
+      "page": "cwaadmin/adminhome",
+      "layout": "admin"
+    },
+    {
+      "path": "/cwaadmin/manageusers",
+      "page": "cwaadmin/manageusers",
+      "layout": "admin"
     }
-  ]
+  ],
+  "layouts": {
+    "admin": {
+      "exec": "/api/security/is_admin"
+    }
+  }
 }

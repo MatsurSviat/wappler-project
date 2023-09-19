@@ -1,68 +1,40 @@
 {
   "meta": {
-    "options": {
-      "linkedFile": "/views/login.ejs",
-      "linkedForm": "login1"
-    },
     "$_GET": [
       {
         "type": "text",
-        "name": "sort"
-      },
-      {
-        "type": "text",
-        "name": "dir"
-      }
-    ],
-    "$_POST": [
-      {
-        "type": "text",
-        "fieldName": "email",
-        "name": "email"
-      },
-      {
-        "type": "text",
-        "fieldName": "password",
-        "name": "password"
-      },
-      {
-        "type": "text",
-        "name": "remember"
+        "name": "role_id"
       }
     ]
   },
   "exec": {
     "steps": [
       {
-        "name": "identity",
+        "name": "",
         "module": "auth",
-        "action": "login",
+        "action": "restrict",
         "options": {
           "provider": "wappler",
-          "username": "{{$_POST.email}}"
-        },
-        "output": true,
-        "meta": []
+          "permissions": [
+            "Administrator"
+          ],
+          "loginUrl": "/login",
+          "forbiddenUrl": "/login"
+        }
       },
       {
-        "name": "identity1",
-        "module": "auth",
-        "action": "identify",
-        "options": {
-          "provider": "wappler"
-        },
-        "output": true,
-        "meta": []
-      },
-      {
-        "name": "user_details",
+        "name": "query",
         "module": "dbconnector",
-        "action": "select",
+        "action": "single",
         "options": {
           "connection": "db",
           "sql": {
             "type": "select",
             "columns": [
+              {
+                "table": "role",
+                "column": "role_id"
+              },
               {
                 "table": "role",
                 "column": "user_id"
@@ -77,7 +49,7 @@
                 "operator": "equal",
                 "type": "expression",
                 "name": ":P1",
-                "value": "{{identity}}",
+                "value": "{{$_GET.role_id}}",
                 "test": ""
               }
             ],
@@ -86,26 +58,26 @@
             },
             "primary": "role_id",
             "joins": [],
+            "query": "select `role_id`, `user_id`, `role` from `role` where `role`.`role_id` = ?",
             "wheres": {
               "condition": "AND",
               "rules": [
                 {
-                  "id": "role.user_id",
-                  "field": "role.user_id",
-                  "type": "string",
+                  "id": "role.role_id",
+                  "field": "role.role_id",
+                  "type": "double",
                   "operator": "equal",
-                  "value": "{{identity}}",
+                  "value": "{{$_GET.role_id}}",
                   "data": {
                     "table": "role",
-                    "column": "user_id",
-                    "type": "text",
+                    "column": "role_id",
+                    "type": "number",
                     "columnObj": {
-                      "type": "string",
-                      "maxLength": 255,
-                      "primary": false,
+                      "type": "increments",
+                      "primary": true,
                       "unique": false,
-                      "nullable": true,
-                      "name": "user_id"
+                      "nullable": false,
+                      "name": "role_id"
                     }
                   },
                   "operation": "="
@@ -113,12 +85,15 @@
               ],
               "conditional": null,
               "valid": true
-            },
-            "query": "select `user_id`, `role` from `role` where `role`.`user_id` = ?"
+            }
           }
         },
         "output": true,
         "meta": [
+          {
+            "type": "number",
+            "name": "role_id"
+          },
           {
             "type": "text",
             "name": "user_id"
@@ -128,7 +103,7 @@
             "name": "role"
           }
         ],
-        "outputType": "array"
+        "outputType": "object"
       }
     ]
   }
