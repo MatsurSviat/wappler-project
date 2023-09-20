@@ -39,8 +39,8 @@
             <a class="nav-item nav-link active" href="/">Link</a>
             <div class="nav-item dropdown"><a class="nav-link dropdown-toggle" href="#" id="navbar1_dropdown" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Account</a>
               <div class="dropdown-menu" aria-labelledby="navbar1_dropdown">
-                <a class="dropdown-item" href="/login" dmx-show="(conn_layout_logged_user.data.identity < 1)">Login</a>
-                <a class="dropdown-item" href="#" dmx-on:click="run({'bootbox.confirm':{message:'Do you wish to logout?',title:'Logout',buttons:{confirm:{label:'Logout'},cancel:{label:'cancel'}},then:{steps:[{comment:{msg:'logout'}},{serverConnect:{url:'/api/registration/logout',site:'wappler-project',name:'sc',outputType:'object'}},{run:{action:`browser1.goto(\'/\')`,outputType:'text'}}]},name:'logout'}})" dmx-show="(conn_layout_logged_user.data.identity &gt; 0)">Logout</a>
+                <a class="dropdown-item" href="/login" dmx-hide="(conn_layout_logged_user.data.identity < 1)">Login</a>
+                <a class="dropdown-item" href="#" dmx-on:click="run({'bootbox.confirm':{message:'Do you wish to logout?',title:'Logout',buttons:{confirm:{label:'Logout'},cancel:{label:'cancel'}},then:{steps:[{comment:{msg:'logout'}},{serverConnect:{url:'/api/registration/logout',site:'wappler-project',name:'sc',outputType:'object'}},{run:{action:`browser1.goto(\'/\')`,outputType:'text'}}]},name:'logout'}})" dmx-hide="(conn_layout_logged_user.data.identity &gt; 0)">Logout</a>
                 <a class="dropdown-item" href="/register" dmx-hide="(conn_layout_logged_user.data.identity &gt; 0)">Register</a>
                 <div class="dropdown-divider" dmx-show="(conn_layout_logged_user.data.identity &gt; 0)"></div>
 
