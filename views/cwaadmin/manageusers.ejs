@@ -1,8 +1,57 @@
 <!-- Wappler include head-page="layouts/admin" fontawesome_5="cdn" bootstrap5="local" is="dmx-app" id="manageusers" appConnect="local" components="{dmxBootstrap5TableGenerator:{},dmxTyped:{},dmxBootstrap5Modal:{},dmxNotifications:{},dmxBootbox5:{}}" -->
 <dmx-notifications id="notifies1"></dmx-notifications>
+<dmx-serverconnect id="conn_all_roles" url="/api/admin/role/all_roles"></dmx-serverconnect>
+<dmx-serverconnect id="conn_user_roles" url="/api/admin/role/user_roles" noload="true"></dmx-serverconnect>
+
 <meta name="ac:route" content="/cwaadmin/manageusers">
 <dmx-serverconnect id="conn_users" url="/api/admin/user/search" dmx-param:filter="input1.value"></dmx-serverconnect>
 <dmx-serverconnect id="conn_single_user" url="/api/admin/user/read" noload="true"></dmx-serverconnect>
+<div class="modal" id="modal_role" is="dmx-bs5-modal" tabindex="-1">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header bg-secondary text-light">
+                <h5 class="modal-title">User roles</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="table-responsive">
+                    <table class="table table-striped table-bordered table-hover table-sm">
+                        <thead>
+                            <tr>
+                                <th>Role</th>
+                                <th>Rolename</th>
+                                <th scope="row"></th>
+                            </tr>
+                        </thead>
+                        <tbody is="dmx-repeat" dmx-generator="bs5table" dmx-bind:repeat="conn_user_roles.data.query" id="tableRepeat3">
+                            <tr>
+                                <td dmx-text="role"></td>
+                                <td dmx-text="rolename"></td>
+                                <td>
+                                    <button id="btn4" class="btn btn-danger w-100" dmx-on:click="run([{serverConnect:{url:'/api/admin/role/delete',site:'wappler-project',params:{role_id:`role_id`},name:'sc',outputType:'object'}},{run:{action:`conn_user_roles.load({user_id: conn_single_user.data.query.user_id})`,outputType:'text'}}])">
+                                        <i class="fas fa-trash fa-2x"></i></button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <form id="form1" method="post" is="dmx-serverconnect-form" action="/api/admin/role/add_role_user" dmx-on:success="notifies1.success('Role added');conn_user_roles.load({user_id: conn_single_user.data.query.user_id})">
+                    <input id="text1" name="user_id" class="form-control" dmx-bind:value="conn_user_roles.data.query[0].user_id" type="hidden">
+                    <div class="form-group mb-3">
+                        <label for="id_role" class="form-label">Select</label>
+                        <select id="id_role" class="form-select" dmx-bind:options="conn_all_roles.data.query" optiontext="rolename" optionvalue="role" name="role">
+                        </select>
+                        <small id="select1Help" class="form-text text-muted">Enter a help text for your select.</small>
+                    </div>
+                    <button id="btn5" class="btn btn-success" type="submit">Add role</button>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
 <div class="modal" id="modal_edit_user" is="dmx-bs5-modal" tabindex="-1" dmx-on:hide-bs-modal="serverconnectform1.reset()">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
@@ -84,7 +133,7 @@
                                 <i class="fas fa-edit fa-2x"></i></button>
                         </td>
                         <td>
-                            <button id="btn2" class="btn btn-warning w-100">
+                            <button id="btn2" class="btn btn-warning w-100" dmx-on:click="run([{run:{action:`conn_single_user.load({user_id: user_id})`,outputType:'text'}},{run:{action:`conn_user_roles.load({user_id: user_id})`,outputType:'text'}},{run:{action:`modal_role.show()`,outputType:'text'}}])">
                                 <i class="fas fa-user-cog fa-2x"></i>
                             </button>
                         </td>

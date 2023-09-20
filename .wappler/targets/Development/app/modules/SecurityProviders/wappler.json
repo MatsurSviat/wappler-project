@@ -35,6 +35,17 @@
             "value": "U"
           }
         ]
+      },
+      "E-commerce": {
+        "table": "role",
+        "identity": "user_id",
+        "conditions": [
+          {
+            "column": "role",
+            "operator": "=",
+            "value": "T"
+          }
+        ]
       }
     }
   },
